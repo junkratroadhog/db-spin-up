@@ -71,16 +71,23 @@ pipeline {
                             exit 1
                         fi
 
-                    # Try a simple SQL command inside container
-                    docker exec -i $ORACLE_CNAME bash -c "source /opt/oracle/env.sh && echo 'SELECT instance_name FROM v\\$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
-                    if [ \$? -eq 0 ]; then
-                        echo "Oracle DB is ready!"
-                        SUCCESS=1
-                        break
-                    fi
+                        # Try a simple SQL command inside container
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
+                            export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
+                            export PATH=\\$ORACLE_HOME/bin:\\$PATH
+                            echo 'SELECT instance_name, status, open_mode FROM v\\\\$instance;' | sqlplus -s / as sysdba
+                        " 2>&1)
 
-                    echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
-                    sleep \$MAX_INTERVAL
+                        echo "$OUTPUT"
+
+                        if echo "$OUTPUT" | grep -q "OPEN"; then
+                            echo "✅ Oracle DB is ready!"
+                            SUCCESS=1
+                            break
+                        fi
+
+                        echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
+                        sleep \$MAX_INTERVAL
                     done
 
                     if [ $SUCCESS -ne 1 ]; then
