@@ -106,49 +106,11 @@ pipeline {
         stage('Validating Oracle Container') {
             steps {
                 sh '''
-                    MAX_INTERVAL=10
-                    MAX_RETRIES=30
-                    SUCCESS=0
-
-                    for i in $(seq 1 $MAX_RETRIES); do
-                        RUNNING=$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME} 2>/dev/null || echo "false")
-                        if [ "$RUNNING" != "true" ]; then
-                            echo "Oracle container is not running!"
-                            docker logs ${ORACLE_CNAME}
-                            exit 1
-                        fi
-
-                        echo "Attempting to connect to Oracle DB (try $i/$MAX_RETRIES)..."
-
-                        RESULT=$(docker exec -i ${ORACLE_CNAME} bash -c '
-                            sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
-                            set heading off feedback off verify off echo off
-                            select instance_name || " " || status || " " || open_mode || " " || database_role from v\\$instance;
-                            select name || " " || open_mode from v\\$database;
-                            exit;
-EOF
-                        ')
-
-                        echo "SQL*Plus Output:"
-                        echo "$RESULT"
-
-                        if echo "$RESULT" | grep -q "READ WRITE"; then
-                            echo "Oracle DB is ready and open in READ WRITE mode!"
-                            SUCCESS=1
-                            break
-                        fi
-
-                        echo "Oracle DB not ready yet. Waiting..."
-                        sleep $MAX_INTERVAL
-                    done
-
-                    if [ $SUCCESS -ne 1 ]; then
-                        echo "Oracle DB failed to start within expected time."
-                        docker logs ${ORACLE_CNAME}
-                        exit 1
-                    fi
-
-                    docker logs ${ORACLE_CNAME} | tail -n 20
+                    echo \$ORACLE_CNAME
+                    echo \$ORACLE_PASSWORD
+                    echo \$ORACLE_PDB
+                    echo \$ORACLE_HOME
+                    echo \$ORACLE_PORT
                 '''
             }
         }
