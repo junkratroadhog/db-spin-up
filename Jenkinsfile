@@ -37,7 +37,7 @@ pipeline {
                         docker pull \${ORACLE_IMAGE}
                     
                     else
-                        echo "Docker Image has been pulled"
+                        echo "Docker Image is already available. Hence proceeding with the old further"
                     fi
                 """
             }
