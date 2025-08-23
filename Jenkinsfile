@@ -31,10 +31,15 @@ pipeline {
 
         stage('Pulling Oracle Image gvenzl/oracle-xe') {
             steps {
-                sh '''
-                    #docker pull ${ORACLE_IMAGE}
-                    echo "Docker Image has been pulled"
-                '''
+                sh """
+                    if [ -z "\$(docker images -q \$ORACLE_IMAGE)" ]; then
+                        echo "Docker Image not found. Pulling..."
+                        docker pull \${ORACLE_IMAGE}
+                    
+                    else
+                        echo "Docker Image has been pulled"
+                    fi
+                """
             }
         }
 
@@ -55,9 +60,10 @@ pipeline {
         stage('Validating Oracle Container') {
             steps {
                 sh '''
-                    sqlplus / as sysdba
+                    docker exec -i oracle-db sqlplus / as sysdba <<EOF
                     select name, open_mode, database_role, db_unique_name from v$database;
                     exit;
+                    EOF
                     docker logs ${ORACLE_CONTAINER_NAME} | tail -n 20
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."                    
                 '''
@@ -70,6 +76,7 @@ pipeline {
             sh '''
                 docker stop ${ORACLE_CNAME}
                 docker rm ${ORACLE_CNAME}
+                cleanWs()
             '''
         }
     }
