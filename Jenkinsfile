@@ -56,30 +56,38 @@ pipeline {
             }
         }
 
-        stage('Validating Oracle Container') {
+        /*stage('Validating Oracle Container') {
             steps {
-                sh '''
+                    sh '''
                     MAX_INTERVAL=5
                     MAX_RETRIES=30
                     SUCCESS=0
 
-                    for i in $(seq 1 $MAX_RETRIES); do
-                        RUNNING=$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME} 2>/dev/null || echo "false")
-                        if [ "$RUNNING" != "true" ]; then
+                    for i in \$(seq 1 \$MAX_RETRIES); do
+                        RUNNING=\$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME})
+                        if [ "\$RUNNING" != "true" ]; then
                             echo "Oracle container is not running!"
                             docker logs ${ORACLE_CNAME}
                             exit 1
                         fi
 
-                        # Check container logs for readiness
-                        if docker logs ${ORACLE_CNAME} 2>&1 | grep -q "DATABASE IS READY TO USE!"; then
-                            echo "Oracle DB is ready!"
+                        # Try a simple SQL command inside container
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
+                            export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
+                            export PATH=\\$ORACLE_HOME/bin:\\$PATH
+                            echo 'SELECT instance_name, status, open_mode FROM v\\\\$instance;' | sqlplus -s / as sysdba
+                        " 2>&1)
+
+                        echo "$OUTPUT"
+
+                        if echo "$OUTPUT" | grep -q "OPEN"; then
+                            echo "✅ Oracle DB is ready!"
                             SUCCESS=1
                             break
                         fi
 
-                        echo "Waiting for Oracle DB to start... ($i/$MAX_RETRIES)"
-                        sleep $MAX_INTERVAL
+                        echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
+                        sleep \$MAX_INTERVAL
                     done
 
                     if [ $SUCCESS -ne 1 ]; then
@@ -88,11 +96,52 @@ pipeline {
                         exit 1
                     fi
 
+                    # Show last 20 lines of logs for reference
                     docker logs ${ORACLE_CNAME} | tail -n 20
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."
-                '''
+                    '''
             }
+        }*/
+
+        stage('Validate DB Status'){
+            sh '''
+                MAX_INTERVAL=5
+                MAX_RETRIES=30
+                SUCCESS=0
+    
+                for i in $(seq 1 $MAX_RETRIES); do
+                    RUNNING=$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME} 2>/dev/null || echo "false")
+                    if [ "$RUNNING" != "true" ]; then
+                        echo "Oracle container is not running!"
+                        docker logs ${ORACLE_CNAME}
+                        exit 1
+                    fi
+    
+                    # Try SQL query
+                    if docker exec -i ${ORACLE_CNAME} bash -c "
+                        sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
+                        set heading off feedback off;
+                        select name, open_mode from v\\$database;
+                        exit;
+EOF    
+                    " | grep -q 'READ WRITE'; then
+                        echo 'Oracle DB is ready and OPEN!'
+                        SUCCESS=1
+                        break
+                    fi
+    
+                    echo "Waiting for Oracle DB to start... ($i/$MAX_RETRIES)"
+                    sleep $MAX_INTERVAL
+                done
+    
+                if [ $SUCCESS -ne 1 ]; then
+                    echo "Oracle DB failed to start within expected time."
+                    docker logs ${ORACLE_CNAME}
+                    exit 1
+                fi
+            '''      
         }
+
     }
 
     post {
