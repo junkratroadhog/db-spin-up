@@ -71,8 +71,7 @@ pipeline {
                         fi
                 """
 
-                    # Try a simple SQL command inside container
-                    sh"""
+                    sh """
                     if docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba <<EOF | grep -q "1"
                     SELECT 1 FROM dual;
                     EXIT;
@@ -81,7 +80,8 @@ pipeline {
                         echo "Oracle DB is ready!"
                         break
                     fi
-
+                    """
+                sh """
                     echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
                     sleep \$MAX_INTERVAL
                     done
