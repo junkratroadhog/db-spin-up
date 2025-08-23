@@ -69,8 +69,10 @@ pipeline {
                             docker logs ${ORACLE_CNAME}
                             exit 1
                         fi
+                """
 
                     # Try a simple SQL command inside container
+                    sh"""
                     if docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba <<EOF | grep -q "1"
                     SELECT 1 FROM dual;
                     EXIT;
