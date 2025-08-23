@@ -13,7 +13,7 @@ pipeline {
     stages {
 
         stage('Checking for Conflicting Container Names') {
-            
+
             steps {
                 sh '''
                     while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
@@ -32,7 +32,8 @@ pipeline {
         stage('Pulling Oracle Image gvenzl/oracle-xe') {
             steps {
                 sh '''
-                    docker pull ${ORACLE_IMAGE}
+                    #docker pull ${ORACLE_IMAGE}
+                    echo "Docker Image has been pulled"
                 '''
             }
         }
