@@ -58,9 +58,10 @@ pipeline {
 
         stage('Validating Oracle Container') {
             steps {
-                    sh """
+                    sh '''
                     MAX_INTERVAL=5
                     MAX_RETRIES=30
+                    SUCCESS=0
 
                     for i in \$(seq 1 \$MAX_RETRIES); do
                         RUNNING=\$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME})
@@ -71,7 +72,7 @@ pipeline {
                         fi
 
                     # Try a simple SQL command inside container
-                    docker exec -i $ORACLE_CNAME bash -c "echo 'SELECT instance_name FROM v$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
+                    docker exec -i $ORACLE_CNAME bash -c "echo 'SELECT instance_name FROM v\\$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
                     if [ \$? -eq 0 ]; then
                         echo "Oracle DB is ready!"
                         SUCCESS=1
@@ -90,8 +91,8 @@ pipeline {
 
                     # Show last 20 lines of logs for reference
                     docker logs ${ORACLE_CNAME} | tail -n 20
-                    echo "Oracle Container ${ORACLE_CNAME} started successfully."                  
-                    """
+                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
+                    '''
             }
         }
     }
