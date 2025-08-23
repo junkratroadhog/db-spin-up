@@ -23,6 +23,7 @@ pipeline {
                     echo "Container \${ORACLE_CNAME} is not running."
                 '''
             }
+        }
 
         stage('Pulling Oracle Image gvenzl/oracle-xe') {
             steps {
