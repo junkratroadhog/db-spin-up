@@ -103,10 +103,10 @@ pipeline {
             }
         }*/
 
-        stage('Validate DB Status'){
-            steps{
+        stage('Validating Oracle Container') {
+            steps {
                 sh '''
-                    MAX_INTERVAL=5
+                    MAX_INTERVAL=10
                     MAX_RETRIES=30
                     SUCCESS=0
 
@@ -118,29 +118,36 @@ pipeline {
                             exit 1
                         fi
 
-                        # Try SQL query
-                        if docker exec -i ${ORACLE_CNAME} bash -c "
+                        echo "Attempting to connect to Oracle DB (try $i/$MAX_RETRIES)..."
+
+                        RESULT=$(docker exec -i ${ORACLE_CNAME} bash -c '
                             sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
-                            set heading off feedback off;
-                            select name, open_mode from v\\$database;
+                            set heading off feedback off verify off echo off
+                            select instance_name || " " || status || " " || open_mode || " " || database_role from v\\$instance;
+                            select name || " " || open_mode from v\\$database;
                             exit;
-EOF     
-                        " | grep -q 'READ WRITE'; then
-                            echo 'Oracle DB is ready and OPEN!'
+EOF
+                        ')
+
+                        echo "SQL*Plus Output:"
+                        echo "$RESULT"
+
+                        if echo "$RESULT" | grep -q "READ WRITE"; then
+                            echo "✅ Oracle DB is ready and open in READ WRITE mode!"
                             SUCCESS=1
                             break
                         fi
 
-                        echo "Waiting for Oracle DB to start... ($i/$MAX_RETRIES)"
+                        echo "Oracle DB not ready yet. Waiting..."
                         sleep $MAX_INTERVAL
                     done
 
                     if [ $SUCCESS -ne 1 ]; then
-                        echo "Oracle DB failed to start within expected time."
+                        echo "❌ Oracle DB failed to start within expected time."
                         docker logs ${ORACLE_CNAME}
                         exit 1
                     fi
-                    # Show last 20 lines of logs for reference
+
                     docker logs ${ORACLE_CNAME} | tail -n 20
                 '''
             }
