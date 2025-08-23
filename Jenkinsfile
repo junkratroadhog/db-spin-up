@@ -52,7 +52,6 @@ pipeline {
                     -e ORACLE_HOME=${ORACLE_HOME} \
                     -p ${ORACLE_PORT}:1521 \
                     ${ORACLE_IMAGE}
-                    sleep 60
                 '''
             }
         }
@@ -94,17 +93,7 @@ pipeline {
 
                     # Show last 20 lines of logs for reference
                     docker logs ${ORACLE_CNAME} | tail -n 20
-                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
-            
-
-                    /*
-                    docker exec -i oracle-db sqlplus / as sysdba <<EOF
-                    select name, open_mode, database_role, db_unique_name from v$database;
-                    exit;
-                    EOF
-                    docker logs ${ORACLE_CNAME} | tail -n 20
-                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
-                    */                    
+                    echo "Oracle Container ${ORACLE_CNAME} started successfully."                  
                 """
             }
         }
