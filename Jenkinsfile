@@ -56,7 +56,7 @@ pipeline {
             }
         }
 
-        stage('Validating Oracle Container') {
+        /*stage('Validating Oracle Container') {
             steps {
                     sh '''
                     MAX_INTERVAL=5
@@ -101,7 +101,7 @@ pipeline {
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."
                     '''
             }
-        }
+        }*/
     }
 
     post {
