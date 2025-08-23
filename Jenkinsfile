@@ -133,7 +133,7 @@ EOF
                         echo "$RESULT"
 
                         if echo "$RESULT" | grep -q "READ WRITE"; then
-                            echo "✅ Oracle DB is ready and open in READ WRITE mode!"
+                            echo "Oracle DB is ready and open in READ WRITE mode!"
                             SUCCESS=1
                             break
                         fi
@@ -143,7 +143,7 @@ EOF
                     done
 
                     if [ $SUCCESS -ne 1 ]; then
-                        echo "❌ Oracle DB failed to start within expected time."
+                        echo "Oracle DB failed to start within expected time."
                         docker logs ${ORACLE_CNAME}
                         exit 1
                     fi
