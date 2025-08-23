@@ -147,8 +147,6 @@ EOF
         }
     }
 
-    }
-
     post {
         always {
             sh '''
