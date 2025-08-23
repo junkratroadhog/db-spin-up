@@ -58,7 +58,7 @@ pipeline {
 
         stage('Validating Oracle Container') {
             steps {
-                sh """
+                    sh """
                     MAX_INTERVAL=5
                     MAX_RETRIES=30
 
@@ -69,9 +69,8 @@ pipeline {
                             docker logs ${ORACLE_CNAME}
                             exit 1
                         fi
-                """
 
-                    sh """
+
                     if docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba <<EOF | grep -q "1"
                     SELECT 1 FROM dual;
                     EXIT;
@@ -80,8 +79,7 @@ pipeline {
                         echo "Oracle DB is ready!"
                         break
                     fi
-                    """
-                sh """
+
                     echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
                     sleep \$MAX_INTERVAL
                     done
@@ -96,7 +94,7 @@ pipeline {
                     # Show last 20 lines of logs for reference
                     docker logs ${ORACLE_CNAME} | tail -n 20
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."                  
-                """
+                    """
             }
         }
     }
