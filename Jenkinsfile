@@ -71,7 +71,7 @@ pipeline {
                         fi
 
                     # Try a simple SQL command inside container
-                    docker exec -i ${ORACLE_CNAME} bash -c "echo 'SELECT 1 FROM dual; EXIT;' | sqlplus -s / as sysdba" | grep -q "1"
+                    docker exec -i $ORACLE_CNAME bash -c "echo 'SELECT instance_name FROM v$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
                     if [ $? -eq 0 ]; then
                         echo "Oracle DB is ready!"
                         SUCCESS=1
@@ -82,11 +82,11 @@ pipeline {
                     sleep \$MAX_INTERVAL
                     done
 
-                if [ $SUCCESS -ne 1 ]; then
-                    echo "Oracle DB failed to start within expected time."
-                    docker logs ${ORACLE_CONTAINER_NAME}
-                    exit 1
-                fi
+                    if [ $SUCCESS -ne 1 ]; then
+                        echo "Oracle DB failed to start within expected time."
+                        docker logs ${ORACLE_CNAME}
+                        exit 1
+                    fi
 
                     # Show last 20 lines of logs for reference
                     docker logs ${ORACLE_CNAME} | tail -n 20
