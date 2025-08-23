@@ -81,7 +81,7 @@ pipeline {
                     fi
 
                     echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
-                    sleep \$SLEEP_INTERVAL
+                    sleep \$MAX_INTERVAL
                     done
 
                     # If DB not ready after max retries
