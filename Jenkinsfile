@@ -9,14 +9,42 @@ pipeline {
         ORACLE_PORT = 1521
     }
     stages {
-        stage('Check for previous docker containers with the same name') {
+        stage('Checking for Conflicting Container Names') {
             steps {
                 sh '''
-                    if [ $(docker ps -a -q -f name=${ORACLE_CNAME}) ]; then
-                        echo "Container ${ORACLE_CNAME} is already running."
-                    else
-                        echo "Container ${ORACLE_CNAME} is not running."
-                    fi
+                    while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
+                        sh '''
+                        echo "Container \${ORACLE_CNAME} is already running."
+                        docker stop \${ORACLE_CNAME}
+                        docker rm \${ORACLE_CNAME}
+                        echo "Container \${ORACLE_CNAME} has been removed Successfully. Checking for additional containers..."
+                        '''
+                    done
+                    echo "Container \${ORACLE_CNAME} is not running."
+                '''
+            }
+
+        stage('Pulling Oracle Image gvenzl/oracle-xe') {
+            steps {
+                sh '''
+                    docker pull ${ORACLE_IMAGE}
+                '''
+            }
+        }
+
+        stage('Starting Oracle Container') {
+            steps {
+                sh '''
+                    docker run -d --name ${ORACLE_CNAME} \
+                    -e ORACLE_PWD=${ORACLE_PASSWORD} \
+                    -e ORACLE_PDB=${ORACLE_PDB} \
+                    -e ORACLE_HOME=${ORACLE_HOME} \
+                    -p ${ORACLE_PORT}:1521 \
+                    ${ORACLE_IMAGE}
+                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
+                    sqlplus / as sysdba
+                    select name, open_mode, database_role, db_unique_name from v$database;
+                    exit;
                 '''
             }
         }
