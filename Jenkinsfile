@@ -72,7 +72,7 @@ pipeline {
                         fi
 
                     # Try a simple SQL command inside container
-                    docker exec -i $ORACLE_CNAME bash -c "echo 'SELECT instance_name FROM v\\$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
+                    docker exec -i $ORACLE_CNAME bash -c "source /opt/oracle/env.sh && echo 'SELECT instance_name FROM v\\$instance;' | sqlplus -s sys/$ORACLE_PASSWORD@localhost:1521/$ORACLE_PDB as sysdba"
                     if [ \$? -eq 0 ]; then
                         echo "Oracle DB is ready!"
                         SUCCESS=1
