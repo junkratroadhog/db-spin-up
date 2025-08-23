@@ -72,9 +72,9 @@ pipeline {
 
                     # Try a simple SQL command inside container
                     if docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba <<EOF | grep -q "1"
-                        SELECT 1 FROM dual;
-                        EXIT;
-                        EOF
+                    SELECT 1 FROM dual;
+                    EXIT;
+                    EOF
                     then
                         echo "Oracle DB is ready!"
                         break
