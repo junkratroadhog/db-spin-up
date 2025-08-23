@@ -37,7 +37,7 @@ pipeline {
                         docker pull \${ORACLE_IMAGE}
                     
                     else
-                        echo "Docker Image is already available. Hence proceeding with the old further"
+                        echo "Local Docker Image is Available. Hence Proceeding With The Old Image."
                     fi
                 """
             }
@@ -115,7 +115,7 @@ pipeline {
             sh '''
                 docker stop ${ORACLE_CNAME}
                 docker rm ${ORACLE_CNAME}
-                cleanWs()
+                #cleanWs()
             '''
         }
     }
