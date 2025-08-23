@@ -59,14 +59,53 @@ pipeline {
 
         stage('Validating Oracle Container') {
             steps {
-                sh '''
+                sh """
+                    MAX_INTERVAL=5
+                    MAX_RETRIES=30
+
+                    for i in \$(seq 1 \$MAX_RETRIES); do
+                        RUNNING=\$(docker inspect -f '{{.State.Running}}' ${ORACLE_CONTAINER_NAME})
+                        if [ "\$RUNNING" != "true" ]; then
+                            echo "Oracle container is not running!"
+                            docker logs ${ORACLE_CONTAINER_NAME}
+                            exit 1
+                        fi
+
+                    # Try a simple SQL command inside container
+                    if docker exec -i ${ORACLE_CONTAINER_NAME} sqlplus -s / as sysdba <<EOF | grep -q "1"
+                        SELECT 1 FROM dual;
+                        EXIT;
+                        EOF
+                    then
+                        echo "Oracle DB is ready!"
+                        break
+                    fi
+
+                    echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
+                    sleep \$SLEEP_INTERVAL
+                    done
+
+                    # If DB not ready after max retries
+                    if [ "\$i" == "\$MAX_RETRIES" ]; then
+                        echo "Oracle DB failed to start within expected time."
+                        docker logs ${ORACLE_CONTAINER_NAME}
+                        exit 1
+                    fi
+
+                    # Show last 20 lines of logs for reference
+                    docker logs ${ORACLE_CONTAINER_NAME} | tail -n 20
+                    echo "Oracle Container ${ORACLE_CONTAINER_NAME} started successfully."
+            
+
+                    /*
                     docker exec -i oracle-db sqlplus / as sysdba <<EOF
                     select name, open_mode, database_role, db_unique_name from v$database;
                     exit;
                     EOF
                     docker logs ${ORACLE_CONTAINER_NAME} | tail -n 20
-                    echo "Oracle Container ${ORACLE_CNAME} started successfully."                    
-                '''
+                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
+                    */                    
+                """
             }
         }
     }
