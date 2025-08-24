@@ -99,8 +99,8 @@ pipeline {
                 sh '''
                 pwd
                 ls -ltr scripts/
-                docker cp scripts/db-ls-status.sh ${ORACLE_CNAME}:/tmp/db-ls-status.sh
-                docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-ls-status.sh
+                docker cp scripts/db-ls-status.sql ${ORACLE_CNAME}:/tmp/db-ls-status.sql
+                docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-ls-status.sql
                 docker exec -i ${ORACLE_CNAME} bash -c "ps -ef | grep tns"
                 '''
             }
