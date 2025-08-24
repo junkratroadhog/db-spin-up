@@ -13,16 +13,13 @@ pipeline {
     stages {
 
         stage('Checking for Conflicting Container Names') {
-
             steps {
                 sh '''
                     while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
-                        sh """
                         echo "Container \${ORACLE_CNAME} already exists. Removing it..."
                         docker stop \${ORACLE_CNAME}
                         docker rm \${ORACLE_CNAME}
                         echo "Container \${ORACLE_CNAME} has been removed Successfully. Checking for additional containers..."
-                        """
                     done
                     echo "Container \${ORACLE_CNAME} is not running."
                 '''
