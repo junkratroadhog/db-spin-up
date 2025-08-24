@@ -59,6 +59,8 @@ pipeline {
                     SUCCESS=0
 
                     for i in \$(seq 1 \$MAX_RETRIES); do
+                        echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
+                        sleep \$MAX_INTERVAL
                         RUNNING=\$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME})
                         if [ "\$RUNNING" != "true" ]; then
                             echo "Oracle container is not running!"
@@ -79,8 +81,8 @@ pipeline {
                             break
                         fi
 
-                        echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
-                        sleep \$MAX_INTERVAL
+                        
+                        
                     done
 
                     if [ $SUCCESS -ne 1 ]; then
