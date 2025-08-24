@@ -54,8 +54,8 @@ pipeline {
         stage('Validating Oracle Container') {
             steps {
                     sh '''
-                    MAX_INTERVAL=5
-                    MAX_RETRIES=30
+                    MAX_INTERVAL=15
+                    MAX_RETRIES=10
                     SUCCESS=0
 
                     for i in \$(seq 1 \$MAX_RETRIES); do
@@ -66,8 +66,6 @@ pipeline {
                             exit 1
                         fi
 
-                        pwd
-                        ls -ltr scripts/
                         docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
                         OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
 
@@ -99,6 +97,8 @@ pipeline {
         stage('Validation of DB Status'){
             steps{
                 sh '''
+                pwd
+                ls -ltr scripts/
                 docker cp scripts/db-ls-status.sh ${ORACLE_CNAME}:/tmp/db-ls-status.sh
                 docker exec -i ${ORACLE_CNAME} bash -c "
                     ./tmp/db-ls-status.sh
