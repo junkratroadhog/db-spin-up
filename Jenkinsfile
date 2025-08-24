@@ -107,17 +107,18 @@ pipeline {
                 sqlplus / as sysdba
                 SELECT instance_name, status, open_mode FROM v$instance;
                 "
-            '''
+                '''
+            }
         }
-    }
  
-    post {
-        always {
-            sh ''' 
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
-                #cleanWs()
-            '''
+        post {
+            always {
+                sh ''' 
+                    docker stop ${ORACLE_CNAME}
+                    docker rm ${ORACLE_CNAME}
+                    #cleanWs()
+                '''
+            }
         }
-    }
+    }    
 }
