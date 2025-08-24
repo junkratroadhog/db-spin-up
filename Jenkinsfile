@@ -158,11 +158,10 @@ EOF
  
     post {
         always {
-            sh ''' 
+            sh '''
                 docker stop ${ORACLE_CNAME}
                 docker rm ${ORACLE_CNAME}
                 #cleanWs()
-                ###
             '''
         }
     }
