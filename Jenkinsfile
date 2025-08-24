@@ -110,15 +110,15 @@ pipeline {
                 '''
             }
         }
+    }
  
-        post {
-            always {
-                sh ''' 
-                    docker stop ${ORACLE_CNAME}
-                    docker rm ${ORACLE_CNAME}
-                    #cleanWs()
-                '''
-            }
+    post {
+        always {
+            sh ''' 
+                docker stop ${ORACLE_CNAME}
+                docker rm ${ORACLE_CNAME}
+                #cleanWs()
+            '''
         }
-    }    
+    }      
 }
