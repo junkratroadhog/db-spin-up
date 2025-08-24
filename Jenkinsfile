@@ -120,14 +120,14 @@ pipeline {
 
                         echo "Attempting to connect to Oracle DB (try $i/$MAX_RETRIES)..."
 
-                        RESULT=$(docker exec -i ${ORACLE_CNAME} bash -c '
-                            export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
-                            export PATH=$ORACLE_HOME/bin:$PATH
-                            sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
-                            set heading off feedback off verify off echo off
-                            select instance_name || " " || status || " " || open_mode || " " || database_role from v\\$instance;
-                            select name || " " || open_mode from v\\$database;
-                            exit;
+RESULT=$(docker exec -i ${ORACLE_CNAME} bash -c '
+export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
+export PATH=$ORACLE_HOME/bin:$PATH
+sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
+set heading off feedback off verify off echo off
+select instance_name || " " || status || " " || open_mode || " " || database_role from v\\$instance;
+select name || " " || open_mode from v\\$database;
+exit;
 EOF
                         ')
 
