@@ -69,15 +69,12 @@ pipeline {
                             exit 1
                         fi
 
-OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c " <<'EOF'
-sqlplus -s / as sysdba <<EOSQL
-SET HEADING OFF;
-SET FEEDBACK OFF;
-SELECT status FROM v\\$instance;
-EXIT;
-EOSQL
-EOF
-                        " 2>&1)
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "echo \"
+                        SET HEADING OFF;
+                        SET FEEDBACK OFF;
+                        SELECT status FROM v\\\\$instance;
+                        EXIT;
+                    \" | sqlplus -s / as sysdba" 2>&1)
                         echo "$OUTPUT"
 
                         if echo "$OUTPUT" | grep -q "OPEN"; then
