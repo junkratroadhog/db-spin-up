@@ -69,14 +69,14 @@ pipeline {
                             exit 1
                         fi
 
-                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c " <<'EOF'
-                        sqlplus -s / as sysdba <<EOSQL
-                        SET HEADING OFF;
-                        SET FEEDBACK OFF;
-                        SELECT status FROM v\\$instance;
-                        EXIT;
-                        EOSQL
-                        EOF
+OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c " <<'EOF'
+sqlplus -s / as sysdba <<EOSQL
+SET HEADING OFF;
+SET FEEDBACK OFF;
+SELECT status FROM v\\$instance;
+EXIT;
+EOSQL
+EOF
                         " 2>&1)
                         echo "$OUTPUT"
 
