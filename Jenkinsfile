@@ -47,7 +47,7 @@ pipeline {
                     -p ${ORACLE_PORT}:${ORACLE_PORT} \
                     -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
                     ${ORACLE_IMAGE}
-                    docker exec -i ${ORACLE_CNAME} bash -c "apt-get update && apt-get install -y procps"
+                    docker exec -i ${ORACLE_CNAME} bash -c "apk update && apk add --no-cache procps"
                 '''
             }
         }
