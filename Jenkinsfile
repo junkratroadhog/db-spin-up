@@ -101,12 +101,12 @@ pipeline {
         }
 
         stage('Validation of DB Status'){
-            sh '''
-                docker exec -i ${ORACLE_CNAME} bash -c '
-                    export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
-                    export PATH=$ORACLE_HOME/bin:$PATH
-                    echo "SELECT instance_name, status, open_mode FROM v\\$instance;" | sqlplus -s / as sysdba
-                '
+            steps{
+                sh '''
+                docker exec -i ${ORACLE_CNAME} bash -c "
+                sqlplus / as sysdba
+                SELECT instance_name, status, open_mode FROM v$instance;
+                "
             '''
         }
     }
