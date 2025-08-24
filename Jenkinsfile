@@ -70,8 +70,6 @@ pipeline {
                         fi
 
                         OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "echo \"
-                        SET HEADING OFF;
-                        SET FEEDBACK OFF;
                         SELECT status FROM v\\\\$instance;
                         EXIT;
                     \" | sqlplus -s / as sysdba" 2>&1)
