@@ -68,7 +68,8 @@ pipeline {
 
                         pwd
                         ls -ltr scripts/
-                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba; @/var/jenkins_home/workspace/db-spin-up/scripts/validate_db.sql;)
+                        docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
 
                         echo "$OUTPUT"
 
