@@ -69,12 +69,10 @@ pipeline {
                             exit 1
                         fi
 
-                        # Try a simple SQL command inside container
                         OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
                         sqlplus / as sysdba
-                        SELECT instance_name, status, open_mode FROM v\$instance;
+                        SELECT status FROM v\$instance;
                         " 2>&1)
-
                         echo "$OUTPUT"
 
                         if echo "$OUTPUT" | grep -q "OPEN"; then
