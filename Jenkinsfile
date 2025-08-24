@@ -105,7 +105,7 @@ pipeline {
                 sh '''
                 docker exec -i ${ORACLE_CNAME} bash -c "
                 sqlplus / as sysdba
-                SELECT instance_name, status, open_mode FROM v$instance;
+                SELECT instance_name, status, open_mode FROM v\$instance;
                 "
                 '''
             }
