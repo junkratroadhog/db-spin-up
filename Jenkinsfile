@@ -49,7 +49,7 @@ pipeline {
                     docker run -d --name ${ORACLE_CNAME} \
                     -p ${ORACLE_PORT}:${ORACLE_PORT} \
                     -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
-                    ${ORACLE_CNAME}
+                    ${ORACLE_IMAGE}
                 '''
             }
         }
