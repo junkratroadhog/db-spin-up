@@ -1,5 +1,8 @@
 This is a project to deploy an Oracle Database and Listener in docker container using Jenkins and Validate the DB status.
 
+## Jenkins Pipeline Flow (Oracle DB with Docker)
+
+```text
 +--------------------------------------------------+
 |              Jenkins Pipeline                    |
 +--------------------------------------------------+
