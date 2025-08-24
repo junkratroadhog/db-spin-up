@@ -70,8 +70,12 @@ pipeline {
                         fi
 
                         OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
-                        sqlplus / as sysdba
-                        SELECT status FROM v\$instance;
+                        sqlplus -s / as sysdba << EOF
+                        SET HEADING OFF;
+                        SET FEEDBACK OFF;
+                        SELECT status FROM v\\$instance;
+                        EXIT;                        
+                        EOF
                         " 2>&1)
                         echo "$OUTPUT"
 
@@ -104,7 +108,7 @@ pipeline {
                 sleep 10
                 docker exec -i ${ORACLE_CNAME} bash -c "
                 sqlplus / as sysdba
-                SELECT instance_name, status, open_mode FROM v\$database;
+                SELECT instance_name, status, open_mode FROM v\\$instance;
                 "
                 '''
             }
