@@ -70,7 +70,7 @@ pipeline {
                         fi
 
                         # Try a simple SQL command inside container
-                        OUTPUT=$(docker exec -it ${ORACLE_CNAME} bash -c "
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
                         sqlplus / as sysdba
                         SELECT instance_name, status, open_mode FROM v\$instance;
                         " 2>&1)
