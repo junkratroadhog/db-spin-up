@@ -47,16 +47,14 @@ pipeline {
             steps {
                 sh '''
                     docker run -d --name ${ORACLE_CNAME} \
-                    -e ORACLE_PWD=${ORACLE_PASSWORD} \
-                    -e ORACLE_PDB=${ORACLE_PDB} \
-                    -e ORACLE_HOME=${ORACLE_HOME} \
-                    -p ${ORACLE_PORT}:1521 \
-                    ${ORACLE_IMAGE}
+                    -p ${ORACLE_PORT}:${ORACLE_PORT} \
+                    -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
+                    ${ORACLE_CNAME}
                 '''
             }
         }
 
-        /*stage('Validating Oracle Container') {
+        stage('Validating Oracle Container') {
             steps {
                     sh '''
                     MAX_INTERVAL=5
@@ -72,10 +70,9 @@ pipeline {
                         fi
 
                         # Try a simple SQL command inside container
-                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "
-                            export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
-                            export PATH=\\$ORACLE_HOME/bin:\\$PATH
-                            echo 'SELECT instance_name, status, open_mode FROM v\\\\$instance;' | sqlplus -s / as sysdba
+                        OUTPUT=$(docker exec -it ${ORACLE_CNAME} bash -c "
+                        sqlplus / as sysdba
+                        SELECT instance_name, status, open_mode FROM v$instance;
                         " 2>&1)
 
                         echo "$OUTPUT"
@@ -101,58 +98,16 @@ pipeline {
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."
                     '''
             }
-        }*/
+        }
 
-        stage('Validating Oracle Container') {
-            steps {
-                sh '''
-                    MAX_INTERVAL=10
-                    MAX_RETRIES=30
-                    SUCCESS=0
-
-                    for i in $(seq 1 $MAX_RETRIES); do
-                        RUNNING=$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME} 2>/dev/null || echo "false")
-                        if [ "$RUNNING" != "true" ]; then
-                            echo "Oracle container is not running!"
-                            docker logs ${ORACLE_CNAME}
-                            exit 1
-                        fi
-
-                        echo "Attempting to connect to Oracle DB (try $i/$MAX_RETRIES)..."
-
-                        RESULT=$(docker exec -i ${ORACLE_CNAME} bash -c '
-                            export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
-                            export PATH=$ORACLE_HOME/bin:$PATH
-                            sqlplus -s sys/${ORACLE_PASSWORD}@localhost:1521/${ORACLE_PDB} as sysdba <<EOF
-                            set heading off feedback off verify off echo off
-                            select instance_name || " " || status || " " || open_mode || " " || database_role from v\\$instance;
-                            select name || " " || open_mode from v\\$database;
-                            exit;
-                        EOF
-                        ')
-
-                        echo "SQL*Plus Output:"
-                        echo "$RESULT"
-
-                        if echo "$RESULT" | grep -q "READ WRITE"; then
-                            echo "Oracle DB is ready and open in READ WRITE mode!"
-                            SUCCESS=1
-                            break
-                        fi
-
-                        echo "Oracle DB not ready yet. Waiting..."
-                        sleep $MAX_INTERVAL
-                    done
-
-                    if [ $SUCCESS -ne 1 ]; then
-                        echo "Oracle DB failed to start within expected time."
-                        docker logs ${ORACLE_CNAME}
-                        exit 1
-                    fi
-
-                    docker logs ${ORACLE_CNAME} | tail -n 20
-                '''
-            }
+        stage('Validation of DB Status'){
+            sh '''
+                docker exec -i ${ORACLE_CNAME} bash -c '
+                    export ORACLE_HOME=/opt/oracle/product/21c/dbhome_1
+                    export PATH=$ORACLE_HOME/bin:$PATH
+                    echo "SELECT instance_name, status, open_mode FROM v\\$instance;" | sqlplus -s / as sysdba
+                '
+            '''
         }
     }
  
