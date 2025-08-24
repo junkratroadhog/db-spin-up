@@ -54,7 +54,7 @@ pipeline {
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
-                    MAX_INTERVAL=18
+                    MAX_INTERVAL=20
                     MAX_RETRIES=3
                     SUCCESS=0
 
