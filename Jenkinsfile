@@ -66,8 +66,8 @@ pipeline {
                             exit 1
                         fi
 
-                        docker cp validate_db.sql ${ORACLE_CNAME}:/var/jenkins_home/workspace/db-spin-up/validate_db.sql
-                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/var/jenkins_home/workspace/db-spin-up/validate_db.sql)
+                        docker cp ${WORKSPACE}/validate_db.sql ${ORACLE_CNAME}:/tmp/validate_db.sql
+                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
 
                         echo "$OUTPUT"
 
