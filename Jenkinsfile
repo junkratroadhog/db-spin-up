@@ -75,7 +75,7 @@ pipeline {
                         SET FEEDBACK OFF;
                         SELECT status FROM v\\$instance;
                         EXIT;
-                        EOF
+                        'EOF'
                         " 2>&1)
                         echo "$OUTPUT"
 
