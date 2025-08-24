@@ -47,7 +47,6 @@ pipeline {
                     -p ${ORACLE_PORT}:${ORACLE_PORT} \
                     -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
                     ${ORACLE_IMAGE}
-                    docker exec -i ${ORACLE_CNAME} bash -c "apk update && apk add --no-cache procps"
                 '''
             }
         }
@@ -102,7 +101,7 @@ pipeline {
                 ls -ltr scripts/
                 docker cp scripts/db-ls-status.sql ${ORACLE_CNAME}:/tmp/db-ls-status.sql
                 docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-ls-status.sql
-                docker exec -i ${ORACLE_CNAME} bash -c "ps -ef | grep tns"
+                docker exec -i ${ORACLE_CNAME} lsnrctl status
                 '''
             }
         }
