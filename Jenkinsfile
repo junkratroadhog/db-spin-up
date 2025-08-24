@@ -66,10 +66,12 @@ pipeline {
                             exit 1
                         fi
 
-                        docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
-                        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
+                        if [ \$i -le \$MAX_RETRIES ]; then
+                            docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
+                            OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
 
                         echo "$OUTPUT"
+                        fi
 
                         if echo "$OUTPUT" | grep -q "OPEN"; then
                             echo "✅ Oracle DB is ready!"
