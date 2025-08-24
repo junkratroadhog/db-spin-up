@@ -88,7 +88,7 @@ pipeline {
                     fi
  
                     # Show last 20 lines of logs for reference
-                    docker logs ${ORACLE_CNAME} | tail -n 20
+                    #docker logs ${ORACLE_CNAME} | tail -n 20
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."
                     '''
             }
