@@ -99,9 +99,9 @@ pipeline {
         stage('Validation of DB Status'){
             steps{
                 sh '''
-                docker cp scripts/db-ls-status.sql ${ORACLE_CNAME}:/tmp/db-ls-status.sql
+                docker cp scripts/db-ls-status.sh ${ORACLE_CNAME}:/tmp/db-ls-status.sh
                 docker exec -i ${ORACLE_CNAME} bash -c "
-                    ./tmp/db-ls-status.sql
+                    ./tmp/db-ls-status.sh
                 "
                 '''
             }
