@@ -70,7 +70,7 @@ pipeline {
                         fi
 
                         OUTPUT=$(docker exec -i ${ORACLE_CNAME} bash -c "echo \"
-                        SELECT status FROM v\\\\$instance;
+                        SELECT status FROM v\$instance;
                         EXIT;
                     \" | sqlplus -s / as sysdba" 2>&1)
                         echo "$OUTPUT"
