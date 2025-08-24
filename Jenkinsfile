@@ -100,12 +100,12 @@ pipeline {
                 pwd
                 ls -ltr scripts/
                 docker cp scripts/db-ls-status.sh ${ORACLE_CNAME}:/tmp/db-ls-status.sh
-                docker exec -i ${ORACLE_CNAME} bash -c "
+                docker exec -i ${ORACLE_CNAME} bash 
                 ls -ltr /tmp/
                 #ls -ltr
                 pwd
                 sh /tmp/db-ls-status.sh
-                "
+                
                 '''
             }
         }
