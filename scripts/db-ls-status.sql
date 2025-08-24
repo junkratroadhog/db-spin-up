@@ -1,4 +1,4 @@
-SELECT name, status, open_mode FROM v$instance;
-SELECT * FROM dba_data_files GROUP BY tablespace_name;
-SELECT * FROM v$version;
+SELECT name, status, open_mode FROM v$database;
+SELECT name FROM dba_data_files;
+SELECT BANNER_FULL,BANNER_LEGACY FROM v$version;
 EXIT;

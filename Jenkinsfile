@@ -40,22 +40,23 @@ pipeline {
             }
         }
 
-        stage('Starting Oracle Container') {
+        stage('Initiating Oracle Container') {
             steps {
                 sh '''
                     docker run -d --name ${ORACLE_CNAME} \
                     -p ${ORACLE_PORT}:${ORACLE_PORT} \
                     -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
                     ${ORACLE_IMAGE}
+                    docker exec -i ${ORACLE_CNAME} bash -c "apt-get update && apt-get install -y procps"
                 '''
             }
         }
 
-        stage('Validating Oracle Container') {
+        stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
-                    MAX_INTERVAL=15
-                    MAX_RETRIES=10
+                    MAX_INTERVAL=18
+                    MAX_RETRIES=3
                     SUCCESS=0
 
                     for i in \$(seq 1 \$MAX_RETRIES); do
