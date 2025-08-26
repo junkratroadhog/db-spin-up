@@ -52,6 +52,7 @@ pipeline {
             }
         }
 
+
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
