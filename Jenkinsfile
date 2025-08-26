@@ -52,7 +52,6 @@ pipeline {
             }
         }
 
-
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
@@ -109,8 +108,9 @@ pipeline {
     post {
         always {
             sh ''' 
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
+                echo "Cleaning up..."
+                #docker stop ${ORACLE_CNAME}
+                #docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
