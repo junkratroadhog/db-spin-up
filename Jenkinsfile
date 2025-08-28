@@ -15,6 +15,7 @@ pipeline {
         stage('Checking for Conflicting Container Names') {
             steps {
                 sh '''
+                    echo "This is a feature update"
                     while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
                         echo "Container \${ORACLE_CNAME} already exists. Removing it..."
                         docker stop \${ORACLE_CNAME}
@@ -103,10 +104,11 @@ pipeline {
             }
         }
     }
- 
+
     post {
         always {
             sh ''' 
+                echo "Cleaning up..."
                 docker stop ${ORACLE_CNAME}
                 docker rm ${ORACLE_CNAME}
                 #cleanWs()
