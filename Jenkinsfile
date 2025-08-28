@@ -12,47 +12,7 @@ pipeline {
 
     stages {
 
-/*        stage('Checking for Conflicting Container Names') {
-            steps {
-                sh '''
-                    echo "This is a feature update"
-                    while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
-                        echo "Container \${ORACLE_CNAME} already exists. Removing it..."
-                        docker stop \${ORACLE_CNAME}
-                        docker rm \${ORACLE_CNAME}
-                        echo "Container \${ORACLE_CNAME} has been removed Successfully. Checking for additional containers..."
-                    done
-                    echo "Container \${ORACLE_CNAME} is not running."
-                '''
-            }
-        }
-
-        stage('Pulling Oracle Image gvenzl/oracle-xe') {
-            steps {
-                sh """
-                    if [ -z "\$(docker images -q \$ORACLE_IMAGE)" ]; then
-                        echo "Docker Image not found. Pulling..."
-                        docker pull \${ORACLE_IMAGE}
-                    
-                    else
-                        echo "Local Docker Image is Available. Hence Proceeding With The Old Image."
-                    fi
-                """
-            }
-        }
-
-        stage('Initiating Oracle Container') {
-            steps {
-                sh '''
-                    docker run -d --name ${ORACLE_CNAME} \
-                    -p ${ORACLE_PORT}:${ORACLE_PORT} \
-                    -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
-                    ${ORACLE_IMAGE}
-                '''
-            }
-        }
-*/
-        stage("Starting Oracle DB container"){
+        stage("Creating Oracle DB in Docker Container") {
             steps {
                 sh '''
                     if [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; then
@@ -135,8 +95,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                #docker stop ${ORACLE_CNAME}
-                #docker rm ${ORACLE_CNAME}
+                docker stop ${ORACLE_CNAME}
+                docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
