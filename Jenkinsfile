@@ -12,7 +12,7 @@ pipeline {
 
     stages {
 
-        stage('Checking for Conflicting Container Names') {
+/*        stage('Checking for Conflicting Container Names') {
             steps {
                 sh '''
                     echo "This is a feature update"
@@ -48,6 +48,32 @@ pipeline {
                     -p ${ORACLE_PORT}:${ORACLE_PORT} \
                     -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
                     ${ORACLE_IMAGE}
+                '''
+            }
+        }
+*/
+        stage("Starting Oracle DB container"){
+            steps {
+                sh '''
+                    if [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; then
+                        echo "Container \${ORACLE_CNAME} already exists. Hence starting it..."
+                        docker start \${ORACLE_CNAME}
+                        echo "Container \${ORACLE_CNAME} has been started Successfully."
+                    
+                    else
+                        if [ -z "\$(docker images -q \$ORACLE_IMAGE)" ]; then
+                            echo "Docker Image not found. Pulling..."
+                            docker pull \${ORACLE_IMAGE}
+                        else
+                            echo "Local Docker Image is Available. Hence Proceeding With The Old Image."
+                        fi
+
+                        docker run -d --name ${ORACLE_CNAME} \
+                        -p ${ORACLE_PORT}:${ORACLE_PORT} \
+                        -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
+                        ${ORACLE_IMAGE}
+                        echo "Container \${ORACLE_CNAME} Has Been Created Successfully."
+                    fi
                 '''
             }
         }
@@ -109,8 +135,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
+                #docker stop ${ORACLE_CNAME}
+                #docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
