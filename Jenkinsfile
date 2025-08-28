@@ -72,9 +72,7 @@ pipeline {
                         docker logs ${ORACLE_CNAME}
                         exit 1
                     fi
- 
-                    # Show last 20 lines of logs for reference
-                    #docker logs ${ORACLE_CNAME} | tail -n 20
+
                     echo "Oracle Container ${ORACLE_CNAME} started successfully."
                     '''
             }
@@ -95,8 +93,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
+                #docker stop ${ORACLE_CNAME}
+                #docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
