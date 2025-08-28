@@ -109,8 +109,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                #docker stop ${ORACLE_CNAME}
-                #docker rm ${ORACLE_CNAME}
+                docker stop ${ORACLE_CNAME}
+                docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
