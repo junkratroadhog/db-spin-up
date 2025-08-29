@@ -31,7 +31,7 @@ pipeline {
                     sh '''
                     ./scripts/deploy/deploy_validate_oracle_container.sh
                     '''
-            }
+            } 
         }
 
         stage('Validation of DB & Listener Status'){
