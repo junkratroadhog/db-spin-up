@@ -11,17 +11,17 @@ pipeline {
     }
 
     stages {
-        
+
         stage('Scripts List and Permission check') {
             steps{
-                sh 'chmod +x scripts/*.sh'
+                sh 'chmod +x scripts/deploy/*.sh'
             }
         }
 
         stage("Creating Oracle DB in Docker Container") {
             steps {
                 sh '''
-                ./scripts/create_oracle_container.sh
+                ./scripts/deploy/deploy_create_oracle_container.sh
                 '''
             }
         }
@@ -29,7 +29,7 @@ pipeline {
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
-                    ./scripts/validate_oracle_container.sh
+                    ./scripts/deploy_validate_oracle_container.sh
                     '''
             }
         }
@@ -37,9 +37,7 @@ pipeline {
         stage('Validation of DB & Listener Status'){
             steps{
                 sh '''
-                docker cp scripts/db-health-check.sql ${ORACLE_CNAME}:/tmp/db-health-check.sql
-                docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-health-check.sql
-                docker exec -i ${ORACLE_CNAME} lsnrctl status
+                    ./scripts/deploy/deploy_final_validate.sh
                 '''
             }
         }
@@ -49,9 +47,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
-                #cleanWs()
+                #docker stop ${ORACLE_CNAME}
+                #docker rm ${ORACLE_CNAME}
             '''
         }
     }      
