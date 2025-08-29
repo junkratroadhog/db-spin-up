@@ -24,13 +24,13 @@ pipeline {
 
         stage("Creating Oracle DB in Docker Container") {
             steps {
-                sh 'docker exec -i ${ORACLE_CNAME} bash /tmp/create_oracle_container.sh'
+                sh '/tmp/create_oracle_container.sh'
             }
         }
 
         stage('Validating Oracle DB in Container') {
             steps {
-                    sh 'docker exec -i ${ORACLE_CNAME} bash /tmp/validate_oracle_container.sh'
+                    sh '/tmp/validate_oracle_container.sh'
             }
         }
 
