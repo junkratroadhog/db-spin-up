@@ -29,7 +29,7 @@ pipeline {
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
-                    ./scripts/deploy_validate_oracle_container.sh
+                    ./scripts/deploy/deploy_validate_oracle_container.sh
                     '''
             }
         }
@@ -47,8 +47,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                #docker stop ${ORACLE_CNAME}
-                #docker rm ${ORACLE_CNAME}
+                docker stop ${ORACLE_CNAME}
+                docker rm ${ORACLE_CNAME}
             '''
         }
     }      
