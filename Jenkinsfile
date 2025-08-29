@@ -12,16 +12,6 @@ pipeline {
 
     stages {
 
-        stage("Copy Scripts"){
-            steps {
-                sh '''
-                docker cp scripts/create_oracle_container.sh ${ORACLE_CNAME}:/tmp/create_oracle_container.sh
-                docker cp scripts/validate_oracle_container.sh ${ORACLE_CNAME}:/tmp/validate_oracle_container.sh
-                docker cp scripts/db-health-check.sql ${ORACLE_CNAME}:/tmp/db-health-check.sql
-                '''
-            }
-        }
-
         stage("Creating Oracle DB in Docker Container") {
             steps {
                 sh '/tmp/create_oracle_container.sh'
@@ -37,6 +27,7 @@ pipeline {
         stage('Validation of DB & Listener Status'){
             steps{
                 sh '''
+                docker cp scripts/db-health-check.sql ${ORACLE_CNAME}:/tmp/db-health-check.sql
                 docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-health-check.sql
                 docker exec -i ${ORACLE_CNAME} lsnrctl status
                 '''
