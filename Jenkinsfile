@@ -5,9 +5,9 @@ pipeline {
         ORACLE_IMAGE = 'gvenzl/oracle-xe'
         ORACLE_CNAME = 'oracle-db'
         ORACLE_PASSWORD = 'oracle'
-        //ORACLE_PDB = 'USERS'
-        //ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'
         ORACLE_PORT = 1521
+        // ORACLE_PDB = 'USERS'                                 // This parameter wont work
+        // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
     }
 
     stages {
