@@ -1,17 +1,32 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'CONFIG', defaultValue: '', description: 'Comma separated config key=value pairs')
+    }
+
     environment {
-        ORACLE_IMAGE = 'gvenzl/oracle-xe'
-        ORACLE_CNAME = 'oracle-db'
-        ORACLE_PASSWORD = 'oracle'
-        ORACLE_PORT = 1521
-        RETAIN_DB = 'false'  // Set to 'true' to retain the DB container after the pipeline completes
+        ORACLE_IMAGE = 'gvenzl/oracle-xe'   // default
+        ORACLE_CNAME = 'oracle-db'          // default
+        ORACLE_PASSWORD = 'oracle'          // default
+        ORACLE_PORT = 1521                  // default
+        RETAIN_DB = 'false'                 // default
         // ORACLE_PDB = 'USERS'                                 // This parameter wont work
         // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
     }
 
     stages {
+
+        stage('Parse Config') {
+            steps {
+                script {
+                    params.CONFIG.split(',').each { kv ->
+                        def (k,v) = kv.split('=')
+                        env."${k.trim()}" = v.trim()
+                    }
+                }
+            }
+        }
 
         stage('Scripts List and Permission check') {
             steps{
