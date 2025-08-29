@@ -5,49 +5,23 @@ pipeline {
         ORACLE_IMAGE = 'gvenzl/oracle-xe'
         ORACLE_CNAME = 'oracle-db'
         ORACLE_PASSWORD = 'oracle'
-        ORACLE_PDB = 'USERS'
-        ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'
         ORACLE_PORT = 1521
+        // ORACLE_PDB = 'USERS'                                 // This parameter wont work
+        // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
     }
 
     stages {
 
-        stage('Checking for Conflicting Container Names') {
-            steps {
-                sh '''
-                    echo "This is a feature update"
-                    while [ \$(docker ps -a -q -f name=\${ORACLE_CNAME}) ]; do
-                        echo "Container \${ORACLE_CNAME} already exists. Removing it..."
-                        docker stop \${ORACLE_CNAME}
-                        docker rm \${ORACLE_CNAME}
-                        echo "Container \${ORACLE_CNAME} has been removed Successfully. Checking for additional containers..."
-                    done
-                    echo "Container \${ORACLE_CNAME} is not running."
-                '''
+        stage('Scripts List and Permission check') {
+            steps{
+                sh 'chmod +x scripts/deploy/*.sh'
             }
         }
 
-        stage('Pulling Oracle Image gvenzl/oracle-xe') {
-            steps {
-                sh """
-                    if [ -z "\$(docker images -q \$ORACLE_IMAGE)" ]; then
-                        echo "Docker Image not found. Pulling..."
-                        docker pull \${ORACLE_IMAGE}
-                    
-                    else
-                        echo "Local Docker Image is Available. Hence Proceeding With The Old Image."
-                    fi
-                """
-            }
-        }
-
-        stage('Initiating Oracle Container') {
+        stage("Creating Oracle DB in Docker Container") {
             steps {
                 sh '''
-                    docker run -d --name ${ORACLE_CNAME} \
-                    -p ${ORACLE_PORT}:${ORACLE_PORT} \
-                    -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
-                    ${ORACLE_IMAGE}
+                ./scripts/deploy/deploy_create_oracle_container.sh
                 '''
             }
         }
@@ -55,51 +29,15 @@ pipeline {
         stage('Validating Oracle DB in Container') {
             steps {
                     sh '''
-                    MAX_INTERVAL=20
-                    MAX_RETRIES=3
-                    SUCCESS=0
-
-                    for i in \$(seq 1 \$MAX_RETRIES); do
-                        echo "Waiting for Oracle DB to start... (\$i/\$MAX_RETRIES)"
-                        sleep \$MAX_INTERVAL
-                        RUNNING=\$(docker inspect -f '{{.State.Running}}' ${ORACLE_CNAME})
-                        if [ "\$RUNNING" != "true" ]; then
-                            echo "Oracle container is not running!"
-                            docker logs ${ORACLE_CNAME}
-                            exit 1
-                        fi
-
-                        if [ \$i -le \$MAX_RETRIES ]; then
-                            docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
-                            OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
-                        fi
-
-                        if echo "$OUTPUT" | grep -q "OPEN"; then
-                            echo "✅ Oracle DB is ready!"
-                            SUCCESS=1
-                            break
-                        fi
-                    done
-
-                    if [ $SUCCESS -ne 1 ]; then
-                        echo "Oracle DB failed to start within expected time."
-                        docker logs ${ORACLE_CNAME}
-                        exit 1
-                    fi
- 
-                    # Show last 20 lines of logs for reference
-                    #docker logs ${ORACLE_CNAME} | tail -n 20
-                    echo "Oracle Container ${ORACLE_CNAME} started successfully."
+                    ./scripts/deploy/deploy_validate_oracle_container.sh
                     '''
             }
         }
 
-        stage('Validation of DB Status'){
+        stage('Validation of DB & Listener Status'){
             steps{
                 sh '''
-                docker cp scripts/db-ls-status.sql ${ORACLE_CNAME}:/tmp/db-ls-status.sql
-                docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-ls-status.sql
-                docker exec -i ${ORACLE_CNAME} lsnrctl status
+                    ./scripts/deploy/deploy_final_validate.sh
                 '''
             }
         }
@@ -111,7 +49,6 @@ pipeline {
                 echo "Cleaning up..."
                 docker stop ${ORACLE_CNAME}
                 docker rm ${ORACLE_CNAME}
-                #cleanWs()
             '''
         }
     }      
