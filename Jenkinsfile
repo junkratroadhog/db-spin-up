@@ -6,6 +6,7 @@ pipeline {
         ORACLE_CNAME = 'oracle-db'
         ORACLE_PASSWORD = 'oracle'
         ORACLE_PORT = 1521
+        RETAIN_DB = 'true'
         // ORACLE_PDB = 'USERS'                                 // This parameter wont work
         // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
     }
@@ -47,8 +48,10 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                docker stop ${ORACLE_CNAME}
-                docker rm ${ORACLE_CNAME}
+                if [ "${RETAIN_DB}" != "true" ]; then
+                    docker stop ${ORACLE_CNAME}
+                    docker rm ${ORACLE_CNAME}
+                fi
             '''
         }
     }      
