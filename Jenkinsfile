@@ -6,7 +6,7 @@ pipeline {
         ORACLE_CNAME = 'oracle-db'
         ORACLE_PASSWORD = 'oracle'
         ORACLE_PORT = 1521
-        RETAIN_DB = 'true'
+        RETAIN_DB = 'false'
         // ORACLE_PDB = 'USERS'                                 // This parameter wont work
         // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
     }
