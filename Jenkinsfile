@@ -11,8 +11,11 @@ pipeline {
     }
 
     stages {
+        
         stage('Scripts List and Permission check') {
-            sh 'chmod +x scripts/*.sh'
+            steps{
+                sh 'chmod +x scripts/*.sh'
+            }
         }
 
         stage("Creating Oracle DB in Docker Container") {
