@@ -16,8 +16,8 @@ for i in $(seq 1 $MAX_RETRIES); do
     fi
 
     if [ $i -le $MAX_RETRIES ]; then
-        docker cp scripts/validate_db.sql oracle-db:/tmp/validate_db.sql
-        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/validate_db.sql)
+        docker cp scripts/deploy/db-validate.sql oracle-db:/tmp/db-validate.sql
+        OUTPUT=$(docker exec -i ${ORACLE_CNAME} sqlplus -s / as sysdba @/tmp/db-validate.sql)
     fi
 
     if echo "$OUTPUT" | grep -q "OPEN"; then
