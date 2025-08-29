@@ -14,13 +14,19 @@ pipeline {
 
         stage("Creating Oracle DB in Docker Container") {
             steps {
-                sh 'script/create_oracle_container.sh'
+                sh '''
+                ls -ltr
+                script/create_oracle_container.sh
+                '''
             }
         }
 
         stage('Validating Oracle DB in Container') {
             steps {
-                    sh 'script/validate_oracle_container.sh'
+                    sh '''
+                    ls -ltr
+                    script/validate_oracle_container.sh
+                    '''
             }
         }
 
