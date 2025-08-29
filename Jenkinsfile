@@ -14,13 +14,13 @@ pipeline {
 
         stage("Creating Oracle DB in Docker Container") {
             steps {
-                sh '/tmp/create_oracle_container.sh'
+                sh 'script/create_oracle_container.sh'
             }
         }
 
         stage('Validating Oracle DB in Container') {
             steps {
-                    sh '/tmp/validate_oracle_container.sh'
+                    sh 'script/validate_oracle_container.sh'
             }
         }
 
@@ -39,8 +39,8 @@ pipeline {
         always {
             sh ''' 
                 echo "Cleaning up..."
-                #docker stop ${ORACLE_CNAME}
-                #docker rm ${ORACLE_CNAME}
+                docker stop ${ORACLE_CNAME}
+                docker rm ${ORACLE_CNAME}
                 #cleanWs()
             '''
         }
