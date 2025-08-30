@@ -2,7 +2,11 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'CONFIG', defaultValue: '', description: 'Comma-separated key=value pairs to override default environment variables. Supported keys: ORACLE_IMAGE, ORACLE_CNAME, ORACLE_PASSWORD, ORACLE_PORT, RETAIN_DB')
+        string(
+            name: 'CONFIG',
+            defaultValue: '',  // default if not passed
+            description: 'Comma-separated key=value pairs to override default environment variables. Supported keys: ORACLE_IMAGE, ORACLE_CNAME, ORACLE_PASSWORD, ORACLE_PORT, RETAIN_DB'
+        )
     }
 
     environment {
