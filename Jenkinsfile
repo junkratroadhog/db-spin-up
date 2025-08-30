@@ -1,4 +1,4 @@
-def oracleDeploy = load 'jenkins/oracleDeploy.groovy'
+def oracleDeploy = load 'scripts/deploy/oracleDeploy.groovy'
 
 pipeline {
     agent any
