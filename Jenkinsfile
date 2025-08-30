@@ -1,29 +1,14 @@
-def oracleDeploy = load 'scripts/deploy/oracleDeploy.groovy'
-
 pipeline {
     agent any
 
     stages {
-        stage('Deploy Oracle QA') {
+        stage('Deploy Oracle DB') {
             steps {
                 script {
-                    oracleDeploy(
-                        ORACLE_CNAME: 'qa-db',
-                        ORACLE_PORT: '1522',
-                        RETAIN_DB: 'true'
-                    )
-                }
-            }
-        }
-
-        stage('Deploy Oracle Dev') {
-            steps {
-                script {
-                    oracleDeploy(
-                        ORACLE_CNAME: 'dev-db',
-                        ORACLE_PORT: '1523',
-                        RETAIN_DB: 'true'
-                    )
+                    build job: 'db-spin-up/ora-test',
+                        parameters: [
+                            string(name: 'CONFIG', value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=usersdb,ORACLE_PORT=1525,RETAIN_DB=true')
+                        ]
                 }
             }
         }
