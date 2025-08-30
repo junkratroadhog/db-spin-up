@@ -2,16 +2,35 @@ pipeline {
     agent any
 
     environment {
-        ORACLE_IMAGE = 'gvenzl/oracle-xe'
-        ORACLE_CNAME = 'oracle-db'
-        ORACLE_PASSWORD = 'oracle'
-        ORACLE_PORT = 1521
-        RETAIN_DB = 'false'  // Set to 'true' to retain the DB container after the pipeline completes
-        // ORACLE_PDB = 'USERS'                                 // This parameter wont work
-        // ORACLE_HOME = '/opt/oracle/product/21c/dbhome_1'     // This parameter wont work
+        ORACLE_IMAGE = 'gvenzl/oracle-xe'   //DEFAULT
+        ORACLE_CNAME = 'oracle-db'          //DEFAULT
+        ORACLE_PASSWORD = 'oracle'          //DEFAULT
+        ORACLE_PORT = 1521                  //DEFAULT
+        RETAIN_DB = 'false'  //DEFAULT Set to 'true' to retain the DB container after the pipeline completes
     }
 
     stages {
+
+        stage('Parse CONFIG') {
+            steps {
+                script {
+                    if (params.CONFIG?.trim()) {
+                        params.CONFIG.split(',').each { kv ->
+                            if (kv.contains('=')) {
+                                def (k, v) = kv.split('=', 2)
+                                env."${k.trim()}" = v.trim()
+                            }
+                        }
+                    }
+                    echo """
+                    ORACLE_IMAGE=${env.ORACLE_IMAGE}
+                    ORACLE_CNAME=${env.ORACLE_CNAME}
+                    ORACLE_PORT=${env.ORACLE_PORT}
+                    RETAIN_DB=${env.RETAIN_DB}
+                    """
+                }
+            }
+        }
 
         stage('Scripts List and Permission check') {
             steps{
