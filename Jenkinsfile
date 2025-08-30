@@ -4,17 +4,18 @@ pipeline {
     parameters {
         string(
             name: 'CONFIG',
-            defaultValue: '',  // default if not passed
+            // Set to 'true' to retain the DB container after the pipeline completes
+            defaultValue: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=usersdb,ORACLE_PORT=1525,RETAIN_DB=true',  // default if not passed
             description: 'Comma-separated key=value pairs to override default environment variables. Supported keys: ORACLE_IMAGE, ORACLE_CNAME, ORACLE_PASSWORD, ORACLE_PORT, RETAIN_DB'
         )
     }
 
     environment {
-        ORACLE_IMAGE = 'gvenzl/oracle-xe'   //DEFAULT
-        ORACLE_CNAME = 'oracle-db'          //DEFAULT
+        // ORACLE_IMAGE = 'gvenzl/oracle-xe'   //DEFAULT
+        // ORACLE_CNAME = 'oracle-db'          //DEFAULT
         ORACLE_PASSWORD = 'oracle'          //DEFAULT
-        ORACLE_PORT = 1521                  //DEFAULT
-        RETAIN_DB = 'false'  //DEFAULT Set to 'true' to retain the DB container after the pipeline completes
+        // ORACLE_PORT = 1521                  //DEFAULT
+        // RETAIN_DB = 'false'  //DEFAULT Set to 'true' to retain the DB container after the pipeline completes
     }
 
     stages {
