@@ -22,7 +22,7 @@ pipeline {
                     oracleDeploy(
                         ORACLE_CNAME: 'dev-db',
                         ORACLE_PORT: '1523',
-                        RETAIN_DB: 'false'
+                        RETAIN_DB: 'true'
                     )
                 }
             }
