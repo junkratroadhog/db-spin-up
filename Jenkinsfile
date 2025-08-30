@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'CONFIG', value: '', description: 'Comma-separated key=value pairs to override default environment variables. Supported keys: ORACLE_IMAGE, ORACLE_CNAME, ORACLE_PASSWORD, ORACLE_PORT, RETAIN_DB')
+    }
+
     environment {
         ORACLE_IMAGE = 'gvenzl/oracle-xe'   //DEFAULT
         ORACLE_CNAME = 'oracle-db'          //DEFAULT
