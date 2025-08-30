@@ -19,6 +19,12 @@ pipeline {
 
     stages {
 
+        stage('Debug CONFIG') {
+            steps {
+                echo "CONFIG received: '${params.CONFIG}'"
+            }
+        }
+
         stage('Parse CONFIG') {
             steps {
                 script {
