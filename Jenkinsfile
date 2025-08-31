@@ -40,12 +40,12 @@ pipeline {
                         }
                     }
                     echo """
-                    ORACLE_IMAGE=${env.ORACLE_IMAGE}
                     ORACLE_CNAME=${env.ORACLE_CNAME}
                     ORACLE_PORT=${env.ORACLE_PORT}
-                    RETAIN_DB=${env.RETAIN_DB}
                     ORACLE_SID=${env.ORACLE_SID}
                     ORACLE_PDB=${env.ORACLE_PDB}
+                    ORACLE_IMAGE=${env.ORACLE_IMAGE}
+                    RETAIN_DB=${env.RETAIN_DB}
                     """
                 }
             }
