@@ -23,16 +23,15 @@ pipeline {
 
                     parallel(
                         'Deploy Users DB': {
-                            def CONFIG = """
+                            def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
                                 "ORACLE_CNAME=db-users," +
                                 "ORACLE_SID=USERSPDB," +
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD="oracle"," +
+                                "ORACLE_PASSWORD=oracle," +
                                 "STOP_DB=false"
-                            """.stripIndent().replaceAll("\n", "")
 
                             build job: 'deploy-oracle-db',
                                 parameters: [ string(name : 'CONFIG', value: CONFIG) ]
@@ -40,16 +39,15 @@ pipeline {
                         },
 
                         'Deploy Details DB': {
-                            def CONFIG = """
+                            def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
                                 "ORACLE_CNAME=db-details," +
                                 "ORACLE_SID=DETAILS," +
                                 "ORACLE_PDB=DETAILS_PDB," +
                                 "ORACLE_PORT=1526," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD="oracle"," +
+                                "ORACLE_PASSWORD=oracle," +
                                 "STOP_DB=false"
-                            """
 
                             build job: 'deploy-oracle-db',
                                 parameters: [ string(name : 'CONFIG', value: CONFIG) ]
