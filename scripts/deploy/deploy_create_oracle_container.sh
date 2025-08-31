@@ -13,12 +13,13 @@ else
         echo "Local Docker Image is available."
     fi
 
+    docker volume create --name oradata-${ORACLE_SID}
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
         -e ORACLE_PWD=${ORACLE_PASSWORD} \
         -e ORACLE_SID=${ORACLE_SID} \
         -e ORACLE_PDB=${ORACLE_PDB} \
-        -v /opt/oracle/oradata-${ORACLE_SID}:/opt/oracle/oradata \
+        -v oradata-${ORACLE_SID}:/opt/oracle/oradata \
         ${ORACLE_IMAGE}
 
     echo "Container ${ORACLE_CNAME} created successfully."
