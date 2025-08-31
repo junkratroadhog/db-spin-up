@@ -13,6 +13,7 @@ else
         echo "Local Docker Image is available."
     fi
 
+    echo "hostname -f"
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
         -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
