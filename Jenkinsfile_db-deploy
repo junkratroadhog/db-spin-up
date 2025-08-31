@@ -60,10 +60,10 @@ pipeline {
         stage('Oracle Container Registry Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'OCR_CRED', 
-                                                  usernameVariable: 'ORACLE_USER', 
-                                                  passwordVariable: 'ORACLE_AUTH')])
+                                                  usernameVariable: 'USR', 
+                                                  passwordVariable: 'AUTH')]) {
                 sh '''
-                echo "V5bzPX1RgEefsGxaPV" | docker login container-registry.oracle.com -u junkratroadhogana@gmail.com --password-stdin
+                echo "${AUTH}" | docker login container-registry.oracle.com -u ${USR} --password-stdin
                 '''
             }
         }
