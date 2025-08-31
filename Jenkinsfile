@@ -29,7 +29,7 @@ pipeline {
                                 ORACLE_SID=USERSPDB,
                                 ORACLE_PDB=USERS_PDB,
                                 ORACLE_PORT=1525,
-                                RETAIN_DB=true
+                                RETAIN_DB=false
                             """.stripIndent().replaceAll("\n", "")
 
                             build job: 'deploy-oracle-db',
@@ -44,7 +44,7 @@ pipeline {
                                 ORACLE_SID=DETAILS,
                                 ORACLE_PDB=DETAILS_PDB,
                                 ORACLE_PORT=1526,
-                                RETAIN_DB=true
+                                RETAIN_DB=false
                             """.stripIndent().replaceAll("\n", "")
 
                             build job: 'deploy-oracle-db',
