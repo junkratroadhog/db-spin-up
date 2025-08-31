@@ -15,8 +15,9 @@ else
 
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
-        -e ORACLE_PWD=${ORACLE_PASSWORD} \
+        -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
         ${ORACLE_IMAGE}
+    
 
     echo "Container ${ORACLE_CNAME} created successfully."
 fi
