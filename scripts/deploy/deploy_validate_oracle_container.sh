@@ -2,7 +2,7 @@
 set -e
 
 MAX_INTERVAL=20
-MAX_RETRIES=3
+MAX_RETRIES=10
 SUCCESS=0
 
 for i in $(seq 1 $MAX_RETRIES); do
