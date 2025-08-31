@@ -10,9 +10,9 @@ pipeline {
                             build job: 'deploy-oracle-db',
                             parameters: [
                                 string(name: 'CONFIG', 
-                                value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=usersdb,ORACLE_PORT=1525,RETAIN_DB=true')
+                                value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
                             ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-users,ORACLE_PORT=1525,RETAIN_DB=true"
+                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true"
                         }
                     }
                 }
@@ -23,9 +23,9 @@ pipeline {
                             build job: 'deploy-oracle-db',
                                 parameters: [
                                     string(name: 'CONFIG',
-                                    value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=detailsdb,ORACLE_PORT=1526,RETAIN_DB=true')
+                                    value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
                             ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-details,ORACLE_PORT=1526,RETAIN_DB=true"
+                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true"
                         }
                     }
                 }
