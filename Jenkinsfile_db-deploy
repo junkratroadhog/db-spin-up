@@ -13,7 +13,7 @@ pipeline {
     environment {
         // ORACLE_IMAGE = 'gvenzl/oracle-xe'   //DEFAULT
         // ORACLE_CNAME = 'oracle-db'          //DEFAULT
-        ORACLE_PASSWORD = 'oracle'          //DEFAULT
+        // ORACLE_PASSWORD = 'oracle'          //DEFAULT
         // ORACLE_PORT = 1521                  //DEFAULT
         // RETAIN_DB = 'false'  //DEFAULT Set to 'true' to retain the DB container after the pipeline completes
         // ORACLE_SID   = 'XE'
@@ -46,6 +46,8 @@ pipeline {
                     ORACLE_PDB=${env.ORACLE_PDB}
                     ORACLE_IMAGE=${env.ORACLE_IMAGE}
                     RETAIN_DB=${env.RETAIN_DB}
+                    STOP_DB=${env.STOP_DB}
+                    ORACLE_PASSWORD=${env.ORACLE_PASSWORD}
                     """
                 }
             }
