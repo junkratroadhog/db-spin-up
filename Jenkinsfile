@@ -24,9 +24,9 @@ pipeline {
                             build job: 'deploy-oracle-db',
                                 parameters: [
                                     string(name: 'CONFIG', 
-                                    value: 'ORACLE_IMAGE=container-registry.oracle.com/database/enterprise:21.3.0,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
+                                    value: 'ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
                                 ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=container-registry.oracle.com/database/enterprise:21.3.0,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true"
+                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true"
                         }
                     }
                 }
@@ -37,9 +37,9 @@ pipeline {
                             build job: 'deploy-oracle-db',
                                 parameters: [
                                     string(name: 'CONFIG',
-                                    value: 'ORACLE_IMAGE=container-registry.oracle.com/database/enterprise:21.3.0,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
+                                    value: 'ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
                                 ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=container-registry.oracle.com/database/enterprise:21.3.0,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true"
+                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true"
                         }
                     }
                 }
