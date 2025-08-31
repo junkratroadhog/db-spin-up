@@ -97,11 +97,7 @@ pipeline {
     post {
         always {
             sh ''' 
-                echo "Cleaning up..."
-                if [ "${RETAIN_DB}" != "true" ]; then
-                    docker stop ${ORACLE_CNAME}
-                    docker rm ${ORACLE_CNAME}
-                fi
+                    ./scripts/deploy/post_actions.sh
             '''
         }
     }      
