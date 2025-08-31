@@ -17,31 +17,41 @@ pipeline {
         }
 
         stage('Parallel DB Deploy') {
-            parallel {
-                stage('Deploy Users DB') {
-                    steps {
-                        script {
+            steps {
+                script {
+                    def ORACLE_IMAGE = 'oracle/database:21.3.0-ee'
+
+                    parallel(
+                        'Deploy Users DB': {
+                            def CONFIG = """
+                                ORACLE_IMAGE=${ORACLE_IMAGE},
+                                ORACLE_CNAME=db-users,
+                                ORACLE_SID=USERSPDB,
+                                ORACLE_PDB=USERS_PDB,
+                                ORACLE_PORT=1525,
+                                RETAIN_DB=true
+                            """.stripIndent().replaceAll("\n", "")
+
                             build job: 'deploy-oracle-db',
-                                parameters: [
-                                    string(name: 'CONFIG', 
-                                    value: 'ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
-                                ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true"
-                        }
-                    }
-                }
-    
-                stage('Deploy Details DB') {
-                    steps {
-                        script {
+                                parameters: [ string(name : 'CONFIG', value: CONFIG) ]
+                            echo "Triggered job 'deploy-oracle-db' with parameters:\n${CONFIG.replaceAll(',', '\n')}"
+                        },
+
+                        'Deploy Details DB': {
+                            def CONFIG = """
+                                ORACLE_IMAGE=${ORACLE_IMAGE},
+                                ORACLE_CNAME=db-details,
+                                ORACLE_SID=DETAILS,
+                                ORACLE_PDB=DETAILS_PDB,
+                                ORACLE_PORT=1526,
+                                RETAIN_DB=true
+                            """.stripIndent().replaceAll("\n", "")
+
                             build job: 'deploy-oracle-db',
-                                parameters: [
-                                    string(name: 'CONFIG',
-                                    value: 'ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
-                                ]
-                            echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=oracle/database:21.3.0-ee,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true"
+                                parameters: [ string(name : 'CONFIG', value: CONFIG) ]
+                            echo "Triggered job 'deploy-oracle-db' with parameters:\n${CONFIG.replaceAll(',', '\n')}"
                         }
-                    }
+                    )
                 }
             }
         }
