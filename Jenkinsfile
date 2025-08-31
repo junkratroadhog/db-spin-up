@@ -30,7 +30,7 @@ pipeline {
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD=oracle," +
+                                "ORACLE_DBPASSWORD=oracle," +
                                 "STOP_DB=false"
 
                             build job: 'deploy-oracle-db',
@@ -46,7 +46,7 @@ pipeline {
                                 "ORACLE_PDB=DETAILS_PDB," +
                                 "ORACLE_PORT=1526," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD=oracle," +
+                                "ORACLE_DBPASSWORD=oracle," +
                                 "STOP_DB=false"
 
                             build job: 'deploy-oracle-db',
