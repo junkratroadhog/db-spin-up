@@ -7,7 +7,7 @@ if [ "${RETAIN_DB}" != "true" ]; then
     docker rm ${ORACLE_CNAME}
     docker volume rm oradata_${ORACLE_SID}
 
-else
-    echo "Retaining Oracle DB container ${ORACLE_CNAME}..."
+else if [ "${STOP_DB}" == "true" ]; then
+    echo "Stopping Oracle DB container ${ORACLE_CNAME}..."
     docker stop ${ORACLE_CNAME}
 fi
