@@ -2,6 +2,20 @@ pipeline {
     agent any
 
     stages {
+
+        stage ('Cleaning docker containers of previous oracle DBs') {
+            steps {
+                script {
+                    sh '''
+                    docker ps -a -q -f name=db-users | xargs -r docker stop
+                    docker ps -a -q -f name=db-users | xargs -r docker rm
+                    docker ps -a -q -f name=db-details | xargs -r docker stop
+                    docker ps -a -q -f name=db-details | xargs -r docker rm
+                    '''
+                }
+            }
+        }
+
         stage('Parallel DB Deploy') {
             parallel {
                 stage('Deploy Users DB') {
@@ -10,7 +24,7 @@ pipeline {
                             build job: 'deploy-oracle-db',
                             parameters: [
                                 string(name: 'CONFIG', 
-                                value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
+                                value: 'ORACLE_IMAGE=container-registry.oracle.com/database/free,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true')
                             ]
                             echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-users,ORACLE_SID=USERSPDB,ORACLE_PDB=USERS_PDB,ORACLE_PORT=1525,RETAIN_DB=true"
                         }
@@ -23,7 +37,7 @@ pipeline {
                             build job: 'deploy-oracle-db',
                                 parameters: [
                                     string(name: 'CONFIG',
-                                    value: 'ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
+                                    value: 'ORACLE_IMAGE=container-registry.oracle.com/database/free,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true')
                             ]
                             echo "Triggered job 'deploy-oracle-db' with parameters: ORACLE_IMAGE=gvenzl/oracle-xe,ORACLE_CNAME=db-details,ORACLE_SID=DETAILS,ORACLE_PDB=DETAILS_PDB,ORACLE_PORT=1526,RETAIN_DB=true"
                         }
