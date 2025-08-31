@@ -30,7 +30,7 @@ pipeline {
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
-//                                 "STOP_DB=false"
+                                "STOP_DB=false"
 
                             build job: 'deploy-oracle-db',
                                 parameters: [ string(name : 'CONFIG', value: CONFIG) ]
