@@ -24,13 +24,13 @@ pipeline {
                     parallel(
                         'Deploy Users DB': {
                             def CONFIG = """
-                                "ORACLE_IMAGE=${ORACLE_IMAGE}", +
-                                "ORACLE_CNAME=db-users", +
-                                "ORACLE_SID=USERSPDB", +
-                                "ORACLE_PDB=USERS_PDB", +
-                                "ORACLE_PORT=1525", +
-                                "RETAIN_DB=true", +
-                                "ORACLE_PASSWORD=oracle", +
+                                "ORACLE_IMAGE=${ORACLE_IMAGE}," +
+                                "ORACLE_CNAME=db-users," +
+                                "ORACLE_SID=USERSPDB," +
+                                "ORACLE_PDB=USERS_PDB," +
+                                "ORACLE_PORT=1525," +
+                                "RETAIN_DB=true," +
+                                "ORACLE_PASSWORD=oracle," +
                                 "STOP_DB=false"
                             """.stripIndent().replaceAll("\n", "")
 
