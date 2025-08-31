@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Scripts List and Permission check') {
+        /* stage('Scripts List and Permission check') {
             steps{
                 sh 'chmod +x scripts/deploy/*.sh'
             }
@@ -91,6 +91,6 @@ pipeline {
             sh ''' 
                     ./scripts/deploy/post_actions.sh
             '''
-        }
+        }*/
     }      
 }
