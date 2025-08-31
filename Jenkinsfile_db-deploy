@@ -61,9 +61,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'oracle-creds', 
                                                   usernameVariable: 'ORACLE_USER', 
-                                                  passwordVariable: 'ORACLE_PASS')])
+                                                  passwordVariable: 'ORACLE_AUTH')])
                 sh '''
-                echo $ORACLE_PASS | docker login container-registry.oracle.com \
+                echo $ORACLE_AUTH | docker login container-registry.oracle.com \
                             -u $ORACLE_USER --password-stdin
                 
                 '''
