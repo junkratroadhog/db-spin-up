@@ -23,9 +23,6 @@ else
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
         -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
-        #-e ORACLE_SID=${ORACLE_SID} \
-        #-e ORACLE_PDB=${ORACLE_PDB} \
-        #-v oradata-${ORACLE_SID}:/opt/oracle/oradata \
         ${ORACLE_IMAGE}
 
     echo "Container ${ORACLE_CNAME} created successfully."
