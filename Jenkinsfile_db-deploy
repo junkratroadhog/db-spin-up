@@ -65,6 +65,7 @@ pipeline {
                 sh '''
                 echo "${AUTH}" | docker login container-registry.oracle.com -u ${USR} --password-stdin
                 '''
+                }
             }
         }
 
