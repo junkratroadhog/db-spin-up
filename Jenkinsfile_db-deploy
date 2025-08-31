@@ -63,7 +63,7 @@ pipeline {
                                                   usernameVariable: 'ORACLE_USER', 
                                                   passwordVariable: 'ORACLE_AUTH')])
                 sh '''
-                echo "dQKb0CGBwjbwDH5oEDi" | docker login container-registry.oracle.com -u junkratroadhog --password-stdin
+                echo "V5bzPX1RgEefsGxaPV" | docker login container-registry.oracle.com -u junkratroadhogana@gmail.com --password-stdin
                 '''
             }
         }
