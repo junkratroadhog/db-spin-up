@@ -9,7 +9,17 @@ pipeline {
             description: 'Comma-separated key=value pairs to override default environment variables. Supported keys: ORACLE_IMAGE, ORACLE_CNAME, ORACLE_PASSWORD, ORACLE_PORT, RETAIN_DB'
         )
     }
-
+    environment {
+        // Default values, can be overridden via CONFIG parameter
+        // ORACLE_CNAME = 'usersdb'
+        // ORACLE_PORT = '1525'
+        // ORACLE_SID = 'XE'
+        // ORACLE_PDB = 'XEPDB1'
+        // ORACLE_IMAGE = 'gvenzl/oracle-xe:21-slim'
+        // RETAIN_DB = 'true'
+        // STOP_DB = 'false'
+        ORACLE_PASSWORD = 'oracle'  // Default password for Oracle XE image
+    }
     stages {
 
         stage('Debug CONFIG') {
