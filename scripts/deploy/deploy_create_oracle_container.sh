@@ -13,9 +13,6 @@ else
         echo "Local Docker Image is available."
     fi
 
-    docker run --rm \   
-        -v /opt/oracle:/opt/oracle \
-            alpine sh -c "mkdir -p /opt/oracle/oradata-${ORACLE_SID} && chmod -R 777 /opt/oracle/oradata-${ORACLE_SID}"
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
         -e ORACLE_PWD=${ORACLE_PASSWORD} \
