@@ -30,7 +30,7 @@ pipeline {
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD=oracle," +
+                                "ORACLE_PASSWORD="oracle"," +
                                 "STOP_DB=false"
                             """.stripIndent().replaceAll("\n", "")
 
@@ -47,7 +47,7 @@ pipeline {
                                 "ORACLE_PDB=DETAILS_PDB," +
                                 "ORACLE_PORT=1526," +
                                 "RETAIN_DB=true," +
-                                "ORACLE_PASSWORD=oracle," +
+                                "ORACLE_PASSWORD="oracle"," +
                                 "STOP_DB=false"
                             """
 
