@@ -18,6 +18,7 @@ else
         -e ORACLE_PWD=${ORACLE_PASSWORD} \
         -e ORACLE_SID=${ORACLE_SID} \
         -e ORACLE_PDB=${ORACLE_PDB} \
+        -v /opt/oracle/oradata-${ORACLE_SID}:/opt/oracle/oradata \
         ${ORACLE_IMAGE}
 
     echo "Container ${ORACLE_CNAME} created successfully."
