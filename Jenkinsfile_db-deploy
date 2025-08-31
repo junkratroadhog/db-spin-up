@@ -59,7 +59,7 @@ pipeline {
 
         stage('Oracle Container Registry Login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'oracle-creds', 
+                withCredentials([usernamePassword(credentialsId: 'OCR_CRED', 
                                                   usernameVariable: 'ORACLE_USER', 
                                                   passwordVariable: 'ORACLE_AUTH')])
                 sh '''
