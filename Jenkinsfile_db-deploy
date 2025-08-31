@@ -57,6 +57,19 @@ pipeline {
             }
         }
 
+        stage('Oracle Container Registry Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'oracle-creds', 
+                                                  usernameVariable: 'ORACLE_USER', 
+                                                  passwordVariable: 'ORACLE_PASS')])
+                sh '''
+                echo $ORACLE_PASS | docker login container-registry.oracle.com \
+                            -u $ORACLE_USER --password-stdin
+                
+                '''
+            }
+        }
+
         stage("Creating Oracle DB in Docker Container") {
             steps {
                 sh '''
