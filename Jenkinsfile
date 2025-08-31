@@ -19,7 +19,7 @@ pipeline {
         stage('Parallel DB Deploy') {
             steps {
                 script {
-                    def ORACLE_IMAGE = 'gvenzl/oracle-xe:21-slim'
+                    def ORACLE_IMAGE = 'gvenzl/oracle-xe'
 
                     parallel(
                         'Deploy Users DB': {
