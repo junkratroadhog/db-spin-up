@@ -13,14 +13,12 @@ else
         echo "Local Docker Image is available."
     fi
 
-    sh """
-        echo "Creating Docker container ${env.ORACLE_CNAME} from image ${env.ORACLE_IMAGE}..."
-        echo "ORACLE_SID=${env.ORACLE_SID}"
-        echo "ORACLE_PDB=${env.ORACLE_PDB}"
-        echo "ORACLE_PORT=${env.ORACLE_PORT}"
-        echo "ORACLE_PASSWORD=${env.ORACLE_PASSWORD}"
-        echo "RETAIN_DB=${env.RETAIN_DB}"
-    """
+    echo "Creating Docker container ${ORACLE_CNAME} from image ${ORACLE_IMAGE}..."
+    echo "ORACLE_SID=${ORACLE_SID}"
+    echo "ORACLE_PDB=${ORACLE_PDB}"
+    echo "ORACLE_PORT=${ORACLE_PORT}"
+    echo "ORACLE_PASSWORD=${ORACLE_PASSWORD}"
+    echo "RETAIN_DB=${RETAIN_DB}"
 
     docker run -d --name ${ORACLE_CNAME} \
         -p ${ORACLE_PORT}:1521 \
