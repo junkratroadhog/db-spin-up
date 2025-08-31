@@ -14,7 +14,7 @@ else
     fi
 
     docker run -d --name ${ORACLE_CNAME} \
-        -p ${ORACLE_PORT}:${ORACLE_PORT} \
+        -p ${ORACLE_PORT}:1521 \
         -e ORACLE_PASSWORD=${ORACLE_PASSWORD} \
         ${ORACLE_IMAGE}
 
