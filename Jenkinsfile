@@ -1,22 +1,16 @@
 pipeline {
     agent any
 
+    environment {
+        Deploy_DB = 'false'
+    }
+
     stages {
 
-        stage ('Cleaning docker containers of previous oracle DBs') {
-            steps {
-                script {
-                    sh '''
-                    docker ps -a -q -f name=db-users | xargs -r docker stop
-                    docker ps -a -q -f name=db-users | xargs -r docker rm
-                    docker ps -a -q -f name=db-details | xargs -r docker stop
-                    docker ps -a -q -f name=db-details | xargs -r docker rm
-                    '''
-                }
-            }
-        }
-
         stage('Parallel DB Deploy') {
+            when {
+                environment name: 'Deploy_DB', value: 'true'
+            }
             steps {
                 script {
                     def ORACLE_IMAGE = 'container-registry.oracle.com/database/enterprise:21.3.0.0'
