@@ -3,6 +3,15 @@ pipeline {
 
     stages {
 
+        stage('List all containers') {
+            steps {
+                script {
+                    def containers = sh(script: "docker ps -a --format '{{.Names}}'", returnStdout: true).trim().split('\n')
+                    echo "Containers:\n${containers.join('\n')}"
+                }
+            }
+        }
+
         stage('Parallel DB Deploy') {
             
             steps {
