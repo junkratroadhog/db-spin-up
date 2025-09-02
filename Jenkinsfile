@@ -1,16 +1,10 @@
 pipeline {
     agent any
 
-    environment {
-        Deploy_DB = 'false'
-    }
-
     stages {
 
         stage('Parallel DB Deploy') {
-            when {
-                environment name: 'Deploy_DB', value: 'true'
-            }
+            
             steps {
                 script {
                     def ORACLE_IMAGE = 'container-registry.oracle.com/database/enterprise:21.3.0.0'
