@@ -23,7 +23,7 @@ pipeline {
                             def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
                                 "ORACLE_CNAME=db-users," +
-                                "ORACLE_SID=USERSPDB," +
+                                "ORACLE_SID=USERS," +
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
