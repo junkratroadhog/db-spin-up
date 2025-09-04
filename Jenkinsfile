@@ -23,8 +23,8 @@ pipeline {
                             def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
                                 "ORACLE_CNAME=db-utest," +
-                                "ORACLE_SID=USERS," +
-                                "ORACLE_PDB=USERS_PDB," +
+                                "ORACLE_SID=TUSERS," +
+                                "ORACLE_PDB=TUSERS_PDB," +
                                 "ORACLE_PORT=1525," +
                                 "RETAIN_DB=true," +
                                 "STOP_DB=false"
@@ -38,8 +38,8 @@ pipeline {
                             def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
                                 "ORACLE_CNAME=db-dtest," +
-                                "ORACLE_SID=DETAILS," +
-                                "ORACLE_PDB=DETAILS_PDB," +
+                                "ORACLE_SID=TDETAILS," +
+                                "ORACLE_PDB=TDETAILS_PDB," +
                                 "ORACLE_PORT=1526," +
                                 "RETAIN_DB=true," +
                                 "STOP_DB=false"
