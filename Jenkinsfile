@@ -22,7 +22,7 @@ pipeline {
                         'Deploy Users DB': {
                             def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
-                                "ORACLE_CNAME=db-users," +
+                                "ORACLE_CNAME=db-utest," +
                                 "ORACLE_SID=USERS," +
                                 "ORACLE_PDB=USERS_PDB," +
                                 "ORACLE_PORT=1525," +
@@ -37,7 +37,7 @@ pipeline {
                         'Deploy Details DB': {
                             def CONFIG = 
                                 "ORACLE_IMAGE=${ORACLE_IMAGE}," +
-                                "ORACLE_CNAME=db-details," +
+                                "ORACLE_CNAME=db-dtest," +
                                 "ORACLE_SID=DETAILS," +
                                 "ORACLE_PDB=DETAILS_PDB," +
                                 "ORACLE_PORT=1526," +
