@@ -29,7 +29,7 @@ pipeline {
                                 "RETAIN_DB=true," +
                                 "STOP_DB=false"
 
-                            build job: 'deploy-oracle-db',
+                            build job: 'Oracle-db-deploy',
                                 parameters: [ string(name : 'CONFIG', value: CONFIG) ]
                             echo "Triggered job 'deploy-oracle-db' with parameters:\n${CONFIG.replaceAll(',', '\n')}"
                         },
@@ -44,7 +44,7 @@ pipeline {
                                 "RETAIN_DB=true," +
                                 "STOP_DB=false"
 
-                            build job: 'deploy-oracle-db',
+                            build job: 'Oracle-db-deploy',
                                 parameters: [ string(name : 'CONFIG', value: CONFIG) ]
                             echo "Triggered job 'deploy-oracle-db' with parameters:\n${CONFIG.replaceAll(',', '\n')}"
                         }
